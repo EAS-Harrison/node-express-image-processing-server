@@ -15,6 +15,7 @@ const imageProcessor = (filename) => {
     return new Promise((resolve, reject) => {
         if (isMainThread) {
             try {
+                const monochromeWorker = new Worker(pathToMonochromeWorker, ({ workerData: { source: sourcePath, destination: monochromeDestination } }))
                 const resizeWorker = new Worker(pathToResizeWorker, ({ workerData: { source: sourcePath, destination: resizedDestination } }))
             } catch (error) {
                 reject(error)
