@@ -6,7 +6,7 @@ const pathToMonochromeWorker = path.resolve(__dirname, 'monochromeWorker.js')
 
 
 const uploadPathResolver = (filename) => {
-    path.resolve(__dirname, '../uploads', filename)
+    return path.resolve(__dirname, '../uploads', filename)
 }
 const imageProcessor = () => {
     return new Promise((resolve, reject) => {
