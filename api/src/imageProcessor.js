@@ -30,12 +30,15 @@ const imageProcessor = (filename) => {
                     },
                 });
                 resizeWorker.on('message', (message) => {
-                    resizeWorkerFinished = true
-                    resolve('resizeWorker finished processing')
-                })
+                    resizeWorkerFinished = true;
+                    if (monochromeWorkerFinished) {
+                        resolve('resizeWorker finished processing');
+                    }
+                });
+
                 resizeWorker.on('error', (error) => {
-                    reject(new Error(error.message))
-                })
+                    reject(new Error(error.message));
+                });
             } catch (error) {
                 reject(error)
             }
