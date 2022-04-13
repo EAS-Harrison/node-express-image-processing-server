@@ -44,6 +44,12 @@ const imageProcessor = (filename) => {
                         reject(new Error('Exited with status code ' + code));
                     }
                 });
+                monochromeWorker.on('message', (message) => {
+                    monochromeWorkerFinished = true;
+                    if (resizeWorkerFinished) {
+                        resolve('monochromeWorker finished processing');
+                    }
+                });
             } catch (error) {
                 reject(error)
             }
