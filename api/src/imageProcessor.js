@@ -1,3 +1,4 @@
+const { error } = require('console')
 const path = require('path')
 const { Worker, isMainThread } = require('worker_threads')
 
@@ -9,6 +10,7 @@ const uploadPathResolver = (filename) => {
     return path.resolve(__dirname, '../uploads', filename)
 }
 const imageProcessor = (filename) => {
+    const resizeWorkerFinished = false
     const sourcePath = uploadPathResolver(filename)
     const resizedDestination = uploadPathResolver('resized-' + filename)
     const monochromeDestination = uploadPathResolver('monochrome-' + filename)
@@ -21,14 +23,19 @@ const imageProcessor = (filename) => {
                         destination: resizedDestination,
                     },
                 });
-
-
                 const monochromeWorker = new Worker(pathToMonochromeWorker, {
                     workerData: {
                         source: sourcePath,
                         destination: monochromeDestination,
                     },
                 });
+                resizeWorker.on('message', (message) => {
+                    resizeWorkerFinished = true
+                    resolve('resizeWorker finished processing')
+                })
+                resizeWorker.on('error', (error) => {
+                    reject(new Error(error.message))
+                })
             } catch (error) {
                 reject(error)
             }
